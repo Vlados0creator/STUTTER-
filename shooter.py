@@ -1,9 +1,10 @@
 import pygame 
 import os
+from random import randint
 pygame.init()
 
-WIN_WIDTH = 700
-WIN_HEIGHT = 500
+WIN_WIDTH = 900
+WIN_HEIGHT = 700
 FPS = 40
 
 def file_path(file_name):
@@ -49,8 +50,21 @@ class Player(GameSprite):
 
     def fire(self):
         pass
+class Enemy(GameSprite):
+    def __init__(self,x,y,width,height,img,speed):
+            super().__init__(x,y,width,height,img,speed)
 
-player = Player(300,400,70,70,"Player.jpg",5)
+    def update(self):
+        self.rect.y += self.speed
+        if self.rect.y > WIN_HEIGHT:
+            self.rect.y = 0
+
+enemys = pygame.sprite.Group()
+for i in range(5):
+    enemy = Enemy(randint(0,WIN_WIDTH - 70),0,70,70 , file_path("enemy0.jpg"),randint (1, 4))
+    enemys.add(enemy)
+
+player = Player(300,600,70,70,"Player.jpg",7)
 
 play = True 
 game = True 
@@ -65,6 +79,9 @@ while game == True:
 
         player.reset()
         player.update()
+
+        enemys.draw(window)
+        enemys.update()
 
     clock.tick(FPS)
     pygame.display.update()
